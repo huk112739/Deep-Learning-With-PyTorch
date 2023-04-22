@@ -1,12 +1,14 @@
 import matplotlib
+
 matplotlib.use('nbagg')
 
 import numpy as np
 import matplotlib.pyplot as plt
 
-from .dsets  import Ct, LunaDataset
+from .dsets import Ct, LunaDataset
 
-clim=(-1000.0, 300)
+clim = (-1000.0, 300)
+
 
 def findPositiveSamples(start_ndx=0, limit=100):
     ds = LunaDataset()
@@ -21,6 +23,7 @@ def findPositiveSamples(start_ndx=0, limit=100):
             break
 
     return positiveSample_list
+
 
 def showCandidate(series_uid, batch_ndx=None, **kwargs):
     ds = LunaDataset(series_uid=series_uid, **kwargs)
@@ -55,34 +58,34 @@ def showCandidate(series_uid, batch_ndx=None, **kwargs):
     subplot.set_title('row {}'.format(int(center_irc[1])), fontsize=30)
     for label in (subplot.get_xticklabels() + subplot.get_yticklabels()):
         label.set_fontsize(20)
-    plt.imshow(ct.hu_a[:,int(center_irc[1])], clim=clim, cmap='gray')
+    plt.imshow(ct.hu_a[:, int(center_irc[1])], clim=clim, cmap='gray')
     plt.gca().invert_yaxis()
 
     subplot = fig.add_subplot(len(group_list) + 2, 3, 3)
     subplot.set_title('col {}'.format(int(center_irc[2])), fontsize=30)
     for label in (subplot.get_xticklabels() + subplot.get_yticklabels()):
         label.set_fontsize(20)
-    plt.imshow(ct.hu_a[:,:,int(center_irc[2])], clim=clim, cmap='gray')
+    plt.imshow(ct.hu_a[:, :, int(center_irc[2])], clim=clim, cmap='gray')
     plt.gca().invert_yaxis()
 
     subplot = fig.add_subplot(len(group_list) + 2, 3, 4)
     subplot.set_title('index {}'.format(int(center_irc[0])), fontsize=30)
     for label in (subplot.get_xticklabels() + subplot.get_yticklabels()):
         label.set_fontsize(20)
-    plt.imshow(ct_a[ct_a.shape[0]//2], clim=clim, cmap='gray')
+    plt.imshow(ct_a[ct_a.shape[0] // 2], clim=clim, cmap='gray')
 
     subplot = fig.add_subplot(len(group_list) + 2, 3, 5)
     subplot.set_title('row {}'.format(int(center_irc[1])), fontsize=30)
     for label in (subplot.get_xticklabels() + subplot.get_yticklabels()):
         label.set_fontsize(20)
-    plt.imshow(ct_a[:,ct_a.shape[1]//2], clim=clim, cmap='gray')
+    plt.imshow(ct_a[:, ct_a.shape[1] // 2], clim=clim, cmap='gray')
     plt.gca().invert_yaxis()
 
     subplot = fig.add_subplot(len(group_list) + 2, 3, 6)
     subplot.set_title('col {}'.format(int(center_irc[2])), fontsize=30)
     for label in (subplot.get_xticklabels() + subplot.get_yticklabels()):
         label.set_fontsize(20)
-    plt.imshow(ct_a[:,:,ct_a.shape[2]//2], clim=clim, cmap='gray')
+    plt.imshow(ct_a[:, :, ct_a.shape[2] // 2], clim=clim, cmap='gray')
     plt.gca().invert_yaxis()
 
     for row, index_list in enumerate(group_list):
@@ -92,6 +95,5 @@ def showCandidate(series_uid, batch_ndx=None, **kwargs):
             for label in (subplot.get_xticklabels() + subplot.get_yticklabels()):
                 label.set_fontsize(20)
             plt.imshow(ct_a[index], clim=clim, cmap='gray')
-
 
     print(series_uid, batch_ndx, bool(pos_t[0]), pos_list)

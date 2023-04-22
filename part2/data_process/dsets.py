@@ -21,7 +21,7 @@ from part2.util.logconf import logging
 
 log = logging.getLogger(__name__)
 # log.setLevel(logging.WARN)
-# log.setLevel(logging.INFO)
+## log.setLevel(logging.INFO)
 log.setLevel(logging.DEBUG)
 
 raw_cache = getCache('part2ch10_raw')

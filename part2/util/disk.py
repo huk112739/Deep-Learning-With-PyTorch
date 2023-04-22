@@ -7,9 +7,12 @@ from io import BytesIO
 from diskcache.core import MODE_BINARY
 
 import logging
+
 log = logging.getLogger(__name__)
 # log.setLevel(logging.WARN)
 log.setLevel(logging.INFO)
+
+
 # log.setLevel(logging.DEBUG)
 
 
@@ -37,14 +40,13 @@ class GzipDisk(Disk):
             str_io = BytesIO()
             gz_file = gzip.GzipFile(mode='wb', compresslevel=1, fileobj=str_io)
 
-            for offset in range(0, len(value), 2**30):
-                gz_file.write(value[offset:offset+2**30])
+            for offset in range(0, len(value), 2 ** 30):
+                gz_file.write(value[offset:offset + 2 ** 30])
             gz_file.close()
 
             value = str_io.getvalue()
 
         return super(GzipDisk, self).store(value, read)
-
 
     def fetch(self, mode, filename, value, read):
         """
@@ -70,7 +72,7 @@ class GzipDisk(Disk):
             read_csio = BytesIO()
 
             while True:
-                uncompressed_data = gz_file.read(2**30)
+                uncompressed_data = gz_file.read(2 ** 30)
                 if uncompressed_data:
                     read_csio.write(uncompressed_data)
                 else:
@@ -79,6 +81,7 @@ class GzipDisk(Disk):
             value = read_csio.getvalue()
 
         return value
+
 
 def getCache(scope_str):
     return FanoutCache('dataset/cache/' + scope_str,

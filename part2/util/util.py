@@ -8,6 +8,7 @@ import os
 import numpy as np
 
 import logging
+
 log = logging.getLogger(__name__)
 # log.setLevel(logging.WARN)
 # log.setLevel(logging.INFO)
@@ -16,6 +17,7 @@ log.setLevel(logging.DEBUG)
 IrcTuple = collections.namedtuple('IrcTuple', ['index', 'row', 'col'])
 XyzTuple = collections.namedtuple('XyzTuple', ['x', 'y', 'z'])
 
+
 def irc2xyz(coord_irc, origin_xyz, vxSize_xyz, direction_a):
     cri_a = np.array(coord_irc)[::-1]
     origin_a = np.array(origin_xyz)
@@ -23,6 +25,7 @@ def irc2xyz(coord_irc, origin_xyz, vxSize_xyz, direction_a):
     coords_xyz = (direction_a @ (cri_a * vxSize_a)) + origin_a
     # coords_xyz = (direction_a @ (idx * vxSize_a)) + origin_a
     return XyzTuple(*coords_xyz)
+
 
 def xyz2irc(coord_xyz, origin_xyz, vxSize_xyz, direction_a):
     origin_a = np.array(origin_xyz)
@@ -117,6 +120,7 @@ def prhist(ary, prefix_str=None, **kwargs):
     for i in range(count_ary.shape[0]):
         print("{}{:-8.2f}".format(prefix_str, bins_ary[i]), "{:-10}".format(count_ary[i]))
     print("{}{:-8.2f}".format(prefix_str, bins_ary[-1]))
+
 
 # def dumpCuda():
 #     # small_count = 0
@@ -227,7 +231,7 @@ def enumerateWithEstimate(
             # ... <1>
             duration_sec = ((time.time() - start_ts)
                             / (current_ndx - start_ndx + 1)
-                            * (iter_len-start_ndx)
+                            * (iter_len - start_ndx)
                             )
 
             done_dt = datetime.datetime.fromtimestamp(start_ts + duration_sec)
