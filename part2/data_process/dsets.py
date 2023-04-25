@@ -30,6 +30,7 @@ CandidateInfoTuple = namedtuple(
     'CandidateInfoTuple',
     'isNodule_bool, diameter_mm, series_uid, center_xyz',
 )
+root_path = 'D:\jupyter home\\'
 
 
 @functools.lru_cache(1)
@@ -38,11 +39,11 @@ def getCandidateInfoList(requireOnDisk_bool=True):
     # This will let us use the data, even if we haven't downloaded all of
     # the subsets yet.
     # mhd_list = glob.glob('dataset/part2/luna/subset*/*.mhd')
-    mhd_list = glob.glob('dataset/part2/luna/subset*/*.mhd')
+    mhd_list = glob.glob(root_path + 'dataset/part2/luna/subset*/*.mhd')
     presentOnDisk_set = {os.path.split(p)[-1][:-4] for p in mhd_list}
 
     diameter_dict = {}
-    with open('dataset/part2/luna/annotations.csv', "r") as f:
+    with open(root_path + 'dataset/part2/luna/annotations.csv', "r") as f:
         for row in list(csv.reader(f))[1:]:
             series_uid = row[0]
             annotationCenter_xyz = tuple([float(x) for x in row[1:4]])
@@ -53,7 +54,7 @@ def getCandidateInfoList(requireOnDisk_bool=True):
             )
 
     candidateInfo_list = []
-    with open('dataset/part2/luna/candidates.csv', "r") as f:
+    with open(root_path + 'dataset/part2/luna/candidates.csv', "r") as f:
         for row in list(csv.reader(f))[1:]:
             series_uid = row[0]
 
@@ -91,7 +92,7 @@ class Ct:
         #     'dataset/part2/luna/subset*/{}.mhd'.format(series_uid)
         # )[0]
         mhd_path = glob.glob(
-            'dataset/part2/luna/subset*/{}.mhd'.format(series_uid)
+            root_path + 'dataset/part2/luna/subset*/{}.mhd'.format(series_uid)
         )[0]
 
         ct_mhd = sitk.ReadImage(mhd_path)
@@ -158,17 +159,11 @@ def getCtRawCandidate(series_uid, center_xyz, width_irc):
 
 
 class LunaDataset(Dataset):
-    def __init__(self,
-                 val_stride=0,
-                 isValSet_bool=None,
-                 series_uid=None,
-                 ):
+    def __init__(self, val_stride=0, isValSet_bool=None, series_uid=None):
         self.candidateInfo_list = copy.copy(getCandidateInfoList())
 
         if series_uid:
-            self.candidateInfo_list = [
-                x for x in self.candidateInfo_list if x.series_uid == series_uid
-            ]
+            self.candidateInfo_list = [x for x in self.candidateInfo_list if x.series_uid == series_uid]
 
         if isValSet_bool:
             assert val_stride > 0, val_stride
